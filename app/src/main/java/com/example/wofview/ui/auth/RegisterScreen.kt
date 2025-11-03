@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -15,6 +16,24 @@ fun RegisterScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    fun validateInputs(): Boolean {
+        return when {
+            email.isBlank() -> {
+                errorMessage = "El correo no puede estar vacío"
+                false
+            }
+            password.length < 6 -> {
+                errorMessage = "La contraseña debe tener al menos 6 caracteres"
+                false
+            }
+            else -> {
+                errorMessage = null
+                true
+            }
+        }
+    }
 
     Column(modifier = modifier.padding(16.dp)) {
         Text(text = "Registro", style = MaterialTheme.typography.headlineSmall)
@@ -35,11 +54,29 @@ fun RegisterScreen(
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Button(onClick = { /* aquí registrarías */ onRegisterSuccess() }, modifier = Modifier.fillMaxWidth()) {
+        // Mostrar mensaje de error si existe
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        Button(
+            onClick = {
+                if (validateInputs()) {
+                    onRegisterSuccess()
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Registrar")
         }
+
         Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(onClick = onShowLogin, modifier = Modifier.fillMaxWidth()) {
@@ -48,3 +85,13 @@ fun RegisterScreen(
     }
 }
 
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PreviewRegisterScreen() {
+    MaterialTheme {
+        RegisterScreen(
+            onRegisterSuccess = {},
+            onShowLogin = {}
+        )
+    }
+}

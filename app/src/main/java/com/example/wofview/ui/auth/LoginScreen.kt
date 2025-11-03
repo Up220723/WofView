@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -17,7 +18,10 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
 
     Column(modifier = modifier.padding(16.dp)) {
-        Text(text = "Iniciar sesión", style = MaterialTheme.typography.headlineSmall)
+        Text(
+            text = "Iniciar sesión",
+            style = MaterialTheme.typography.headlineSmall
+        )
         Spacer(modifier = Modifier.height(12.dp))
 
         OutlinedTextField(
@@ -37,14 +41,30 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { /* aquí validarías */ onLoginSuccess() }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { /* aquí validarías */ onLoginSuccess() },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Entrar")
         }
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextButton(onClick = onShowRegister, modifier = Modifier.fillMaxWidth()) {
+        TextButton(
+            onClick = onShowRegister,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Crear cuenta")
         }
     }
 }
 
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PreviewLoginScreen() {
+    MaterialTheme {
+        LoginScreen(
+            onLoginSuccess = {},
+            onShowRegister = {}
+        )
+    }
+}
